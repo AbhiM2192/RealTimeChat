@@ -4,30 +4,51 @@ import styled from 'styled-components';
 function ChatContent({message:{user,text},name}) {
     let currentUser = false;    
     const trimmedName = name.trim().toLowerCase();
-
+    console.log(user,name)
     const CurrentDiv = styled.div`
     background-color:blue;
     color:white;
+    transform: translateX(370px);
+    max-width: 50vw;
+    font-size: 1.2rem;
+    padding: 5px 15px;
+    border-radius: 30px;
+    border: 1px solid blue;
+    margin: 10px;
     `;
-    const CurrentUser = styled.p``;
+    const CurrentUser = styled.p`
+    font-weight: bold;
+    font-style: italic;
+    `;
     const CurrentText = styled.p``;
 
-    const OtherDiv = styled.div``;
-    const OtherUser = styled.p``;
+    const OtherDiv = styled.div`
+    font-size: 1.2rem;
+    background-color: darkgrey;
+    padding: 5px 15px;
+    border-radius: 30px;
+    max-width: 50vw;
+    border: 1px solid darkgrey;
+    transform: translateX(40px);
+    margin: 10px;
+    `;
+    const OtherUser = styled.p`
+    
+    `;
     const OtherText = styled.p``;
-    if(user === name){
+    if(user === name.toLowerCase()){
         currentUser = true;
     }
     return (
         currentUser ? 
         (
             <CurrentDiv>
-                <CurrentUser>{user}{currentUser}</CurrentUser>
+                <CurrentUser>{user} :</CurrentUser>
                 <CurrentText>{text}</CurrentText>
             </CurrentDiv>
         ):(
             <OtherDiv>
-                <OtherUser>{user}</OtherUser>
+                <CurrentUser>{user} :</CurrentUser>
                 <OtherText>{text}</OtherText>
             </OtherDiv>
         )

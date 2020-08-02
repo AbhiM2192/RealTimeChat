@@ -35,7 +35,7 @@ const InputContainer = styled.div`
     margin: 25px 0px;
 `;
 const MessageContainer =styled.div`
-    height:70vh;
+    height:50vh;
 `;
 const Send = styled.button`
     background-color: blue;
