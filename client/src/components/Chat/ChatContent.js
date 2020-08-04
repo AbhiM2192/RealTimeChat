@@ -1,11 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReactEmoji from 'react-emoji';
 
-function ChatContent({message:{user,text},name}) {
-    let currentUser = false;    
-    const trimmedName = name.trim().toLowerCase();
-    console.log(user,name)
-    const CurrentDiv = styled.div`
+const CurrentDiv = styled.div`
     background-color:blue;
     color:white;
     transform: translateX(370px);
@@ -32,10 +29,12 @@ function ChatContent({message:{user,text},name}) {
     transform: translateX(40px);
     margin: 10px;
     `;
-    const OtherUser = styled.p`
     
-    `;
     const OtherText = styled.p``;
+function ChatContent({message:{user,text},name}) {
+    let currentUser = false;    
+    //const trimmedName = name.trim().toLowerCase();
+    //console.log(user,name)
     if(user === name.toLowerCase()){
         currentUser = true;
     }
@@ -44,12 +43,12 @@ function ChatContent({message:{user,text},name}) {
         (
             <CurrentDiv>
                 <CurrentUser>{user} :</CurrentUser>
-                <CurrentText>{text}</CurrentText>
+                <CurrentText>{ReactEmoji.emojify(text)}</CurrentText>
             </CurrentDiv>
         ):(
             <OtherDiv>
                 <CurrentUser>{user} :</CurrentUser>
-                <OtherText>{text}</OtherText>
+                <OtherText>{ReactEmoji.emojify(text)}</OtherText>
             </OtherDiv>
         )
     )

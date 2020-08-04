@@ -1,8 +1,8 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import queryString from 'query-string';
 import io from 'socket.io-client';
 import styled from 'styled-components';
-import ScrollToBottom from 'react-scroll-to-bottom';
+
 import ChatContent from './ChatContent';
 
 const Outer = styled.div`
@@ -36,6 +36,7 @@ const InputContainer = styled.div`
 `;
 const MessageContainer =styled.div`
     height:50vh;
+    overflow:scroll;
 `;
 const Send = styled.button`
     background-color: blue;
@@ -55,12 +56,13 @@ function Chat({location}) {
     const [messages,setMessages] = useState([]);
     const [message,setMessage] = useState('');
     const ENDPOINT = 'localhost:5000';
+    const scrollDiv = useRef();
     useEffect(() =>{
         const {name,room} = queryString.parse(location.search);
         setName(name);
         setRoom(room);
         socket = io(ENDPOINT);
-        console.log(name,room)
+        //console.log(name,room)
         socket.emit('Join',{name,room},()=>{})
 
         return () =>{
@@ -73,28 +75,54 @@ function Chat({location}) {
             setMessages([...messages,message]);
         })
     },[messages]);
+    useEffect(() =>{
+        scrollDiv.current = document.getElementsByClassName('infiniteScroll')[0].children[0];
+    },[]);
+    
+    useEffect(() =>{
+        let scrollInt = setInterval(() =>{
+            let diff = scrollDiv.current.scrollHeight - scrollDiv.current.clientHeight;
+            let isAtBottom = (diff <= scrollDiv.current.scrollTop) ? false : true;
+            
+            if(isAtBottom){
+                scrollDiv.current.scrollBy({
+                    top:106,
+                    left:0,
+                    behaviour:'smooth'
+                })
+            }
+        },500);
+
+        return () =>{
+            clearInterval(scrollInt);
+        }
+        
+    },[])
+    
+
     const sendMessage = (event) =>{
         event.preventDefault();
         if(message){
             socket.emit('sendMessage',message,() =>setMessage(''))
         }
     }
-    console.log(message,messages);
+    //console.log(message,messages);
     const Mess = messages.map((message,i) =><ChatContent key={i} message={message} name={name}/>)
     return (
         <Outer className='outerContainer'>
                 <Styledh2>Welcome to Chat Room {room}</Styledh2>
-                <ScrollToBottom>
+                <div className='infiniteScroll'>
                     <MessageContainer>
                         {Mess}
                     </MessageContainer>
-                </ScrollToBottom>
-                <InputContainer>                
-                    <Input value={message} 
-                    onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <Send onClick={(e) =>sendMessage(e)}>Send</Send>
-                </InputContainer>
+                 </div>
+                    <InputContainer>                
+                        <Input value={message} 
+                        onChange={(e) => setMessage(e.target.value)}
+                        />
+                        <Send onClick={(e) =>sendMessage(e)}>Send</Send>
+                    </InputContainer>
+                
         </Outer>
     )
 }
