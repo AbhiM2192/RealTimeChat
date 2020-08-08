@@ -1,5 +1,6 @@
 const express = require('express');
 const socketio = require('socket.io');
+const cors = require('cors');
 const http = require('http');
 
 const {addUser,removeUser,getUser,getUserinRoom} = require('./Users')
@@ -12,6 +13,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server);
 
+app.use(router);
+app.use(cors())
 io.on('connection',(socket) =>{
     console.log('We have a new connection');
 
@@ -41,7 +44,8 @@ io.on('connection',(socket) =>{
     }
 })
 })
-app.use(router);
+
+
 server.listen(PORT,(error) =>{
     if(error){
         console.log('Unexpected Error occured');
