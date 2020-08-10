@@ -50,7 +50,7 @@ function Join() {
     const [room,setRoom] = useState('');
     return (
         <Outer>
-            <StyledH1>Join</StyledH1>
+            <StyledH1>Login</StyledH1>
             <Inner> 
                 <Input type='text' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)}></Input>
                 <Input type='text' placeholder='Room' value={room} onChange={(e) => setRoom(e.target.value)}></Input>
